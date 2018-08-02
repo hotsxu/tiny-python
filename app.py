@@ -31,11 +31,6 @@ url = quote('https://gank.io/api/data/福利/10/', safe=string.printable)
 urllib3.disable_warnings()
 
 
-@app.route('/')
-def hello_world():
-    return render_template('monkey.html')
-
-
 @app.route('/reptile')
 def start_reptile():
     # http = urllib3.PoolManager()
