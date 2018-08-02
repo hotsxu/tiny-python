@@ -3,7 +3,7 @@ from urllib.parse import quote
 
 from flask import Flask, Response, jsonify, request, render_template
 
-from entity import AppDetailResponse, UploadAppDetailResponse, Result
+from entity import Result
 from flask_pymongo import PyMongo
 import urllib3
 
@@ -33,22 +33,9 @@ urllib3.disable_warnings()
 
 @app.route('/reptile')
 def start_reptile():
-    # http = urllib3.PoolManager()
-    # res = http.request('GET', url + '1')
     # 开始爬
     reptile()
     return Result(True, '开始爬取...')
-
-
-@app.route('/getAppDetail.do', methods=['GET'])
-def get_detail():
-    return AppDetailResponse("1", "1", "1", "1", "1", "1").__dict__
-
-
-@app.route("/uploadAppDetail.do", methods=['POST'])
-def upload_detail():
-    print(request.form)
-    return UploadAppDetailResponse("a", "b", "c", "d", "e").__dict__
 
 
 @app.route('/postToken', methods=['POST'])
