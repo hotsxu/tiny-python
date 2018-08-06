@@ -1,11 +1,8 @@
-import string
-from urllib.parse import quote
-
+from bson import ObjectId, BSON
 from flask import Flask, Response, jsonify, request, render_template
 
 from entity import Result
-from flask_pymongo import PyMongo
-import urllib3
+import pymongo
 
 from firsebase import cloud_push
 from reptile import reptile
@@ -14,6 +11,7 @@ import firebase_admin
 from firebase_admin import credentials
 
 
+# 处理service返回数据
 class MyResponse(Response):
     @classmethod
     def force_type(cls, response, environ=None):
@@ -24,11 +22,22 @@ class MyResponse(Response):
 
 app = Flask(__name__)
 app.response_class = MyResponse
-app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
-mongo = PyMongo(app)
+mongo_client = pymongo.MongoClient('mongodb://localhost:27017/')
+db = mongo_client.tiny
 
-url = quote('https://gank.io/api/data/福利/10/', safe=string.printable)
-urllib3.disable_warnings()
+
+# 处理ObjectId转str
+def bson_process(bson):
+    if isinstance(bson, dict):
+        if bson['_id'] is not None:
+            if isinstance(bson['_id'], ObjectId):
+                bson['_id'] = str(bson['_id'])
+    elif isinstance(bson, list):
+        for obj in bson:
+            if obj['_id'] is not None:
+                if isinstance(obj['_id'], ObjectId):
+                    obj['_id'] = str(obj['_id'])
+    return bson
 
 
 @app.route('/reptile')
@@ -41,13 +50,20 @@ def start_reptile():
 @app.route('/postToken', methods=['POST'])
 def receive_token():
     print(request.data)
-    return ''
+    return Result(True, "ok").__dict__
 
 
 @app.route('/push')
 def push():
     # 连接FCM进行推送
     return cloud_push()
+
+
+@app.route('/test')
+def test():
+    users = db.tiny.find({'name': 'ff'})
+    # print(list(users))
+    return Result(True, bson_process(list(users))).__dict__
 
 
 if __name__ == '__main__':
