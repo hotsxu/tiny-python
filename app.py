@@ -1,5 +1,10 @@
-from bson import ObjectId, BSON
+import functools
+import threading
+
+from bson import ObjectId
+from bs4 import BeautifulSoup
 from flask import Flask, Response, jsonify, request, render_template
+import asyncio
 
 from entity import Result
 import pymongo
@@ -43,8 +48,9 @@ def bson_process(bson):
 @app.route('/reptile')
 def start_reptile():
     # 开始爬
-    reptile()
-    return Result(True, '开始爬取...')
+    # reptile()
+    threading.Thread(target=reptile).start()
+    return Result(True, '开始爬取...').__dict__
 
 
 @app.route('/postToken', methods=['POST'])

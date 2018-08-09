@@ -1,4 +1,5 @@
 from firebase_admin import messaging
+from entity import Result
 
 message = messaging.Message(
     notification=messaging.Notification('推送测试', 'Test'),
@@ -14,4 +15,4 @@ message = messaging.Message(
 def cloud_push():
     response = messaging.send(message)
     print('Successfully sent message:', response)
-    return ''
+    return Result(True, "ok").__dict__
