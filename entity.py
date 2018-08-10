@@ -5,6 +5,6 @@ class Result:
 
 
 class Cat:
-    def __init__(self, __id, url):
-        self.__id = id
+    def __init__(self, image_id, url):
+        self.image_id = image_id
         self.url = url

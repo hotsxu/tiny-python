@@ -1,8 +1,6 @@
-import functools
 import threading
 
 from bson import ObjectId
-from bs4 import BeautifulSoup
 from flask import Flask, Response, jsonify, request, render_template
 import asyncio
 
@@ -48,7 +46,6 @@ def bson_process(bson):
 @app.route('/reptile')
 def start_reptile():
     # 开始爬
-    # reptile()
     threading.Thread(target=reptile).start()
     return Result(True, '开始爬取...').__dict__
 
@@ -63,6 +60,12 @@ def receive_token():
 def push():
     # 连接FCM进行推送
     return cloud_push()
+
+
+@app.route('/get_cat')
+def get_cat():
+    cats = db.tiny.find()
+    return Result(True, bson_process(list(cats))).__dict__
 
 
 @app.route('/test')

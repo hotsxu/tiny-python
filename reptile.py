@@ -23,4 +23,4 @@ def reptile():
     for c in soup.find_all('image'):
         cat = Cat(c.find('id').text, c.find('url').text)
         print(cat.__dict__)
-        # db.tiny.save(cat.__dict__)
+        db.tiny.save(cat.__dict__)
