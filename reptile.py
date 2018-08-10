@@ -19,7 +19,7 @@ def reptile():
     res = requests.get(cat_url + '?format=xml&results_per_page=1000', header)
     print(str(res.text))
     # 解析网页
-    soup = BeautifulSoup(res.text, 'xml')
+    soup = BeautifulSoup(res.text, 'lxml')
     for c in soup.find_all('image'):
         cat = Cat(c.find('id').text, c.find('url').text)
         print(cat.__dict__)

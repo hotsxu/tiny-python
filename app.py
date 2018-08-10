@@ -77,7 +77,7 @@ def test():
 
 if __name__ == '__main__':
     # Firebase
-    cred = credentials.Certificate(r'firsebase\tiny_serviceAccountKey.json')
+    cred = credentials.Certificate(r'firsebase/tiny_serviceAccountKey.json')
     firebase_admin.initialize_app(cred)
     # Flask
     app.debug = True
